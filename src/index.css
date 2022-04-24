@@ -1,21 +1,27 @@
 body {
     font: 14px "Century Gothic", Futura, sans-serif;
     margin: 20px;
-    }
+}
 
-    ol, ul {
+ol, ul {
     padding-left: 30px;
-    }
+}
+ol li button{
+    cursor: pointer;
+}
+ol li:last-child button{
+    background: rgba(34, 27, 249, 0.355);
+}
 
-    .board-row:after {
+.board-row:after {
     clear: both;
     content: "";
     display: table;
-    }
+}
 
-    .status {
+.status {
     margin-bottom: 10px;
-    }
+}
 
     .square {
     background: #fff;
