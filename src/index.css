@@ -9,8 +9,9 @@ ol, ul {
 ol li button{
     cursor: pointer;
 }
+
 ol li:last-child button{
-    background: rgba(34, 27, 249, 0.355);
+    /* background: rgba(34, 27, 249, 0.355); */
 }
 
 .board-row:after {
@@ -23,7 +24,7 @@ ol li:last-child button{
     margin-bottom: 10px;
 }
 
-    .square {
+.square {
     background: #fff;
     border: 1px solid #999;
     float: left;
@@ -36,22 +37,22 @@ ol li:last-child button{
     padding: 0;
     text-align: center;
     width: 34px;
-    }
+}
 
-    .square:focus {
+.square:focus {
     outline: none;
-    }
+}
 
-    .kbd-navigation .square:focus {
+.kbd-navigation .square:focus {
     background: #ddd;
-    }
+}
 
-    .game {
+.game {
     display: flex;
     flex-direction: row;
-    }
+}
 
-    .game-info {
+.game-info {
     margin-left: 20px;
-    }
+}
   

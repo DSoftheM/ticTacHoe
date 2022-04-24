@@ -2,18 +2,19 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-
 const emptyArray = Array(9).fill(null);
 const gameSize = 3;
 
 function Square(props) {
-      return (
+    const color = props.colored ? '#000' : '#fff';
+    return (
         <button 
+            // style={{backgroundColor: "#000"}}
             className="square"
             onClick={props.onClick}>
                 {props.value}
         </button>
-      );
+    );
   }
   
 class Board extends React.Component {
@@ -22,6 +23,7 @@ class Board extends React.Component {
         <Square
             value={this.props.squares[i]}
             onClick={() => this.props.onClick(i)}
+            colored={this.props.indexColoredBtn === i}
         />
       );
     }
@@ -32,26 +34,60 @@ class Board extends React.Component {
                 
         //     }
         // }
+
+        // const matrixToRender = [];
+        // for (let i = 0; i < gameSize; i++) {
+        //     matrixToRender.push(<div className="board-row"></div>);
+        //     for (let j = 0; j < gameSize; j++) {
+        //         matrixToRender[i].push(
+        //             <Square
+        //                 value={this.props.squares[j]}
+        //                 onClick={() => this.props.onClick(j)}
+        //             />
+        //         );
+        //     }
+        // };
+        // return matrixToRender;
         return (
-            <div>
-                <div className="board-row">
+            <>
+                <BoardRow>
                     {this.renderSquare(0)}
                     {this.renderSquare(1)}
                     {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
+                </BoardRow>
+                <BoardRow>
                     {this.renderSquare(3)}
                     {this.renderSquare(4)}
                     {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
+                </BoardRow>
+                <BoardRow>
                     {this.renderSquare(6)}
                     {this.renderSquare(7)}
                     {this.renderSquare(8)}
-                </div>
-            </div>
+                </BoardRow>
+                <ToggleOrder
+                    onReversingClick={() => this.props.onReversingClick}
+                />
+            </>
         );
     }
+}
+
+function ToggleOrder(props) {
+    return (
+        <form onClick={props.onReversingClick()}>
+            <label htmlFor="reverseOrder">Reverse Order</label>
+            <input type='checkbox' id='reverseOrder'></input>
+        </form>
+    )
+}
+
+function BoardRow(props) {
+    return (
+        <div className="board-row">
+            {props.children}
+        </div>
+    )
 }
   
 class Game extends React.Component {
@@ -65,8 +101,28 @@ class Game extends React.Component {
                 squares: [...emptyArray],
             }],
             stepNumber: 0,
-            xIsNext : true,
+            xIsNext: true,
+            isOrderReversed: false,
+            indexColoredBtn: 0,
         };
+
+        this.reverseOrder = this.reverseOrder.bind(this);
+        this.paintFirstBtn = this.paintFirstBtn.bind(this);
+    }
+
+    reverseOrder() {
+        this.setState({isOrderReversed : !this.state.isOrderReversed});
+
+        
+        // this.paintFirstBtn();
+    }
+
+    paintFirstBtn() {
+        const btnsList = document.querySelector('.btns-list');
+        // const checkbox = document.querySelector('#reverseOrder');
+        // const index = checkbox.checked ? btnsList.childElementCount - 1 : 0;
+        const index = this.state.isOrderReversed ? this.state.stepNumber - 1 : 0;
+        btnsList.querySelectorAll('button')[index].style.background = 'rgba(34, 27, 249, 0.355)';
     }
 
     handleClick(i) {
@@ -90,9 +146,7 @@ class Game extends React.Component {
             stepNumber : step,
             xIsNext: (step % 2) === 0,
         });
-        console.log('Game.positions :>> ', Game.positions);
         Game.positions.splice(step);
-        console.log('Game.positions :>> ', Game.positions);
     }
 
 
@@ -106,10 +160,14 @@ class Game extends React.Component {
             const description = move 
                 ? `Go to step №${move} ${Game.positions[move]}`
                 : 'To start';
-
+            const indexColoredBtn = this.state.history.length - 1;
+            const color = indexColoredBtn === move ? "rgba(34, 27, 249, 0.355)" : "#ccc";
             return (
                 <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>
+                    <button 
+                        style={{background: color}}
+                        onClick={() => this.jumpTo(move)}
+                    >
                         {description}
                     </button>
                 </li>
@@ -153,11 +211,13 @@ class Game extends React.Component {
                 <Board 
                     squares={current.squares}
                     onClick={i => this.handleClick(i)}
+                    onReversingClick={this.reverseOrder}
+                    indexColoredBtn={this.state.indexColoredBtn}
                 />
             </div>
             <div className="game-info">
                 <div>{status}</div>
-                <ol>{moves}</ol>
+                <ol className='btns-list'>{this.state.isOrderReversed ? moves.reverse() : moves}</ol>
             </div>
             </div>
         );
@@ -168,12 +228,12 @@ class Game extends React.Component {
   
   // ========================================
   
-  ReactDOM.render(
+ReactDOM.render(
     <Game />,
     document.getElementById('root')
-  );
+);
 
-  function calculateWinner(squares) {
+function calculateWinner(squares) {
     const lines = [
       [0, 1, 2],
       [3, 4, 5],
@@ -191,5 +251,8 @@ class Game extends React.Component {
       }
     }
     return null;
-  }
+}
+
+
+
   
