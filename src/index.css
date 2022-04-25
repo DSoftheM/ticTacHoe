@@ -12,6 +12,7 @@ ol li button{
 
 ol li:last-child button{
     /* background: rgba(34, 27, 249, 0.355); */
+    /* background: rgba(238, 49, 222, 0.5); fiolet */
 }
 
 .board-row:after {
@@ -37,6 +38,7 @@ ol li:last-child button{
     padding: 0;
     text-align: center;
     width: 34px;
+    transition: all 0.3s ease 0s;
 }
 
 .square:focus {
@@ -54,5 +56,8 @@ ol li:last-child button{
 
 .game-info {
     margin-left: 20px;
+}
+form {
+    margin-top: 20px;
 }
   
